@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
             margin: 0;
             color: white;
         }
+
         .container {
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
@@ -24,24 +26,29 @@
             text-align: center;
             margin: 10px;
         }
+
         h1 {
             font-size: 22px;
             margin-bottom: 15px;
         }
+
         form {
             display: flex;
             flex-direction: column;
         }
+
         label {
             font-weight: bold;
             margin-top: 10px;
         }
+
         input {
             padding: 8px;
             border: none;
             border-radius: 5px;
             margin-top: 5px;
         }
+
         button {
             background: #ff9800;
             color: white;
@@ -52,83 +59,107 @@
             cursor: pointer;
             font-size: 16px;
         }
+
         button:hover {
             background: #e68900;
         }
+
         .form-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
         }
+
+        .file-upload-container {
+            display: flex;
+            margin-top: 10px;
+            gap: 8px;
+        }
+
+        .file-upload-button {
+            display: inline-block;
+            /* width: 24px;
+            height: 24px; */
+            padding: 10px 15px;
+            background: #1bdf1e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .file-upload-button:hover {
+            background: #236612;
+            ;
+        }
     </style>
 </head>
+
 <body>
     <div class="form-container">
         <div class="container">
             <h1>Generate CA Certificate</h1>
             <form action="/generate_ca" method="post">
                 <label>Country Code:</label>
-                <input type="text" name="country_code_ca" required maxlength="2" pattern="[A-Za-z]{2}" title="Enter exactly 2 letters of country code">
-                
+                <input type="text" name="country_code_ca" required maxlength="2" pattern="[A-Za-z]{2}"
+                    title="Enter exactly 2 letters of country code">
+
                 <label>State/Province:</label>
                 <input type="text" name="province_ca" required>
-                
+
                 <label>Locality:</label>
                 <input type="text" name="locality_ca" required>
-                
+
                 <label>Organization Name:</label>
                 <input type="text" name="organization_ca" required>
-                
+
                 <label>Common Name (CN):</label>
                 <input type="text" name="common_name_ca" required>
-                
+
                 <button type="submit">Download CA Certificate</button>
             </form>
         </div>
-        
-        <div class="container">
-            <h1>Generate Intermediate Certificate</h1>
-            <form action="/generate_intermediate" method="post">
-                <label>Country Code:</label>
-                <input type="text" name="country_code_int" required maxlength="2" pattern="[A-Za-z]{2}" title="Enter exactly 2 letters of country code">
-                
-                <label>State/Province:</label>
-                <input type="text" name="province_int" required>
-                
-                <label>Locality:</label>
-                <input type="text" name="locality_int" required>
-                
-                <label>Organization Name:</label>
-                <input type="text" name="org_name_int" required>
-                
-                <label>Common Name (CN):</label>
-                <input type="text" name="common_name_int" required>
-                
-                <button type="submit">Download Intermediate Certificate</button>
-            </form>
-        </div>
-        
+
         <div class="container">
             <h1>Generate Partner Certificate</h1>
-            <form action="/generate_partner" method="post">
+            <form action="/generate_partner" method="post" enctype="multipart/form-data">
                 <label>Country Code:</label>
-                <input type="text" name="country_code_part" required maxlength="2" pattern="[A-Za-z]{2}" title="Enter exactly 2 letters of country code">
-                
+                <input type="text" name="country_code_part" required maxlength="2" pattern="[A-Za-z]{2}"
+                    title="Enter exactly 2 letters of country code">
+
                 <label>State/Province:</label>
                 <input type="text" name="province_part" required>
-                
+
                 <label>Locality:</label>
                 <input type="text" name="locality_part" required>
-                
+
                 <label>Organization Name:</label>
                 <input type="text" name="org_name_part" required>
-                
+
                 <label>Common Name (CN):</label>
                 <input type="text" name="common_name_part" required>
-                
+
+                <div class="file-upload-container">
+                    <label for="fileInput" class="file-upload-button">Upload CA Key</label>
+                    <input type="file" name="ca_key_file" accept=".pem" id="fileInput" style="display: none;" required>
+
+                    <label for="fileInput2" class="file-upload-button">Upload CA Certificate</label>
+                    <input type="file" name="ca_cert_file" accept=".crt" id="fileInput2" style="display: none;"
+                        required>
+                </div>
+
                 <button type="submit">Download Partner Certificate</button>
             </form>
         </div>
     </div>
+    <script>
+        document.getElementById('ca_key_file').addEventListener('change', function (e) {
+            document.getElementById('ca_key_file_name').textContent = e.target.files[0]?.name || '';
+        });
+        document.getElementById('ca_cert_file').addEventListener('change', function (e) {
+            document.getElementById('ca_cert_file_name').textContent = e.target.files[0]?.name || '';
+        });
+    </script>
 </body>
+
 </html>
